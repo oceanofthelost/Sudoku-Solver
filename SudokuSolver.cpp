@@ -15,8 +15,8 @@ SudokuSolver::SudokuSolver(char*& rawBoard)
             cell[i][j] = board[i*9+j] - '0';
         }
     }    
-    cout<<"The initial game board"<<endl;
-    print();
+   // print();
+   // cout<<endl<<endl;
 }
 
 //user API for solving
@@ -24,13 +24,14 @@ void SudokuSolver::solve()
 {
     if(backtrackSolve())
     {
-        print();
+        //print();
     }
     else
     {
         cout<<"This is temperary"<<endl;
     }
 }
+
 
 //user API for print
 void SudokuSolver::print()
@@ -47,10 +48,10 @@ void SudokuSolver::print()
 
 bool SudokuSolver::backtrackSolve()
 {
-    unsigned row;
-    unsigned column;
-    unsigned result = openCell();
-    bool valid;
+    //cout<<"I am inside"<<endl;
+    unsigned short row;
+    unsigned short column;
+    short result = openCell();
 
     if(result < 0)
     {
@@ -62,13 +63,14 @@ bool SudokuSolver::backtrackSolve()
 
     for(unsigned k = 1; k <= 9; k++)
     {
-        cell[row][column] = k;
-        if(isValid(row,column))
+        if(isValid(row,column,k))
         {
+            cell[row][column] = k;
             if(backtrackSolve())
             {
                 return true;
             }
+            cell[row][column] = 0;
         }
     }
     return false;
@@ -77,11 +79,11 @@ bool SudokuSolver::backtrackSolve()
 //return -1 if no open cells
 //return xy for vali number. xy is a 2 digit number 
 //      representing the row and column of the open cell
-int SudokuSolver::openCell()
+short SudokuSolver::openCell()
 {
-    for(unsigned row = 0; row < 9; row++)
+    for(short row = 0; row < 9; row++)
     {
-        for(unsigned column = 0; column < 9; column++)
+        for(short column = 0; column < 9; column++)
         {
             if(cell[row][column]==0)
             {
@@ -92,62 +94,57 @@ int SudokuSolver::openCell()
     return -1;
 }
 
-bool isValid(unsigned row, unsigned column)
+bool SudokuSolver::isValid(const unsigned short& row, const unsigned short& column,const unsigned short& num)
 {
-    bool valid = (validRow(row, column) && validColumn(row, column) && validBox(row,column));
-
+    bool valid = (validRow(row,num) && validColumn(column,num) && validBox(row,column,num));
+    
     return valid;
 }
 
-#if 0
-bool validRow(sudokuBoard passed,unsigned row, unsigned column)
+
+bool SudokuSolver::validRow(const unsigned short& row, const unsigned short& num)
 {
     bool valid = true;
 
-    for(auto i = 0;i<9;i++)
+    for(unsigned short column = 0; column<9;column++)
     {
-        if(passed.space[row][column]==passed.space[row][i] && i != column)
+        if(cell[row][column]==num)
+        {
+             valid = false;
+        }
+    }
+   
+    return valid;
+}
+
+bool SudokuSolver::validColumn(const unsigned short& column, const unsigned short& num)
+{
+    bool valid = true;
+
+    for(unsigned short row = 0; row<9;row++)
+    {
+        if(cell[row][column]==num)
         {
             valid = false;
         }
     }
+   
     return valid;
 }
 
-bool validColumn(sudokuBoard passed, unsigned row, unsigned column)
+bool SudokuSolver::validBox(const unsigned short& row, const unsigned short& column,const unsigned short& num)
 {
-    bool valid = true;
-
-    for(auto i = 0;i<9;i++)
+    
+    for(unsigned short i = 0; i<3; i++)
     {
-        if(passed.space[row][column]==passed.space[i][column] && i != row)
+        for(unsigned short j = 0; j<3;j++)
         {
-            valid = false;
+            if(cell[i+(row-row%3)][j+(column-column%3)]==num && ((i+(row-row%3)) != row && (j+(column-column%3))!=column))
+            {
+                return false;
+            }
         }
     }
-
-    return valid;
+    
+    return true;
 }
-
-bool validBox(sudokuBoard passed, unsigned row, unsigned column)
-{
-    bool valid = true;
-
-    for(auto i = 0; i<9; i++)
-    {
-        if(passed.space[i/3][i%3] == passed.space[row][column] && ((i/3 != row) && (i%3 != column)))
-        {
-            valid = false;
-        }
-    }
-    return valid;
-}
-
-bool isValid(sudokuBoard passed, unsigned row, unsigned column)
-{
-    bool valid = (validRow(passed, row, column) && validColumn(passed,row, column) && validBox(passed,row,column));
-
-    return valid;
-}
-#endif
-

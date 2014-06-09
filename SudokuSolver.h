@@ -13,12 +13,13 @@
 			void print();
 		private:
 			unsigned cell[9][9];
-			bool validRow(unsigned,unsigned);
-			bool validColumn(unsigned,unsigned);
-			bool validBox(unsigned,unsigned);
-			bool isValid(unsigned,unsigned);
-			int openCell();
+			bool validRow(const unsigned short&,const unsigned short&);
+			bool validColumn(const unsigned short&,const unsigned short&);
+			bool validBox(const unsigned short&,const unsigned short&,const unsigned short&);
+			bool isValid(const unsigned short&,const unsigned short&,const unsigned short&);
+			short openCell();
 			bool backtrackSolve();
+
 	};
 
 
