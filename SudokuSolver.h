@@ -10,18 +10,13 @@
 		public:
 			SudokuSolver(char* &);
 			void solve();
-			void print();
+			void print() const;
 		private:
 			unsigned cell[9][9];
-			bool validRow(const unsigned short&,const unsigned short&);
-			bool validColumn(const unsigned short&,const unsigned short&);
-			bool validBox(const unsigned short&,const unsigned short&,const unsigned short&);
-			bool isValid(const unsigned short&,const unsigned short&,const unsigned short&);
-			short openCell();
 			bool backtrackSolve(unsigned,unsigned);
-
+			bool isValid(const unsigned &,const unsigned &,const unsigned &) const;
+			bool validRow(const unsigned &,const unsigned &) const;
+			bool validColumn(const unsigned &,const unsigned &) const;
+			bool validBox(const unsigned &,const unsigned &,const unsigned &) const;
 	};
-
-
-
 #endif

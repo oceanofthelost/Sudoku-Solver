@@ -3,8 +3,6 @@
 #include"SudokuSolver.h"
 using namespace std;
 
-//start using const and const reference variables
-
 SudokuSolver::SudokuSolver(char*& rawBoard)
 {
     string board(rawBoard);
@@ -20,11 +18,14 @@ SudokuSolver::SudokuSolver(char*& rawBoard)
 //user API for solving
 void SudokuSolver::solve()
 {
-    backtrackSolve(0,0);
+    if(!backtrackSolve(0,0))
+    {
+        cout<<"No Solution For Board"<<endl;
+    }
 }
 
 //user API for print
-void SudokuSolver::print()
+void SudokuSolver::print() const
 {
     for(unsigned row = 0; row<9; ++row)
     {
@@ -61,6 +62,7 @@ bool SudokuSolver::backtrackSolve(unsigned row, unsigned column)
             cell[row][column] = k;
             if(backtrackSolve(row,column))
             {
+            		
                 return true;
             }
             cell[row][column] = 0;
@@ -70,19 +72,17 @@ bool SudokuSolver::backtrackSolve(unsigned row, unsigned column)
 }
 
 
-bool SudokuSolver::isValid(const unsigned short& row, const unsigned short& column,const unsigned short& num)
+bool SudokuSolver::isValid(const unsigned & row, const unsigned & column,const unsigned & num) const
 {
-    //return (validRow(row,num) and validColumn(column,num) and validBox(row,column,num));
     return (validRow(row,num) and validColumn(column,num) and validBox((row/3)*3,(column/3)*3,num));
-
 }
 
 
-bool SudokuSolver::validRow(const unsigned short& row, const unsigned short& num)
+bool SudokuSolver::validRow(const unsigned & row, const unsigned & num) const
 {
     bool valid = true;
 
-    for(unsigned short column = 0; column<9;++column)
+    for(unsigned  column = 0; column<9;++column)
     {
         if(cell[row][column]==num)
         {
@@ -90,15 +90,14 @@ bool SudokuSolver::validRow(const unsigned short& row, const unsigned short& num
              break;
         }
     }
-   
     return valid;
 }
 
-bool SudokuSolver::validColumn(const unsigned short& column, const unsigned short& num)
+bool SudokuSolver::validColumn(const unsigned & column, const unsigned & num) const
 {
     bool valid = true;
 
-    for(unsigned short row = 0; row<9;++row)
+    for(unsigned  row = 0; row<9;++row)
     {
         if(cell[row][column]==num)
         {
@@ -106,43 +105,20 @@ bool SudokuSolver::validColumn(const unsigned short& column, const unsigned shor
             break;
         }
     }
-   
     return valid;
 }
-/*
-bool SudokuSolver::validBox(const unsigned short& row, const unsigned short& column,const unsigned short& num)
+
+
+bool SudokuSolver::validBox(const unsigned & rowOffset, const unsigned & columnOffset,const unsigned & num) const
 {
     bool valid = true;
-
-    for(unsigned short i = 0; i<3; ++i)
-    {
-        for(unsigned short j = 0; j<3;++j)
-        {
-            if(cell[i+(row-row%3)][j+(column-column%3)]==num)
-            {
-                valid = false;
-                break;
-            }
-        }
-    }
-    
-    return valid;
-}
-*/
-
-bool SudokuSolver::validBox(const unsigned short& rowOffset, const unsigned short& columnOffset,const unsigned short& num)
-{
-    bool valid = true;
-    for(unsigned short k=0; k<9;k++)
+    for(unsigned  k=0; k<9;k++)
     {
         if(cell[k/3+rowOffset][k%3+columnOffset] == num)
         {
             valid = false;
             break;
         }
-    }
-
-       
+    }  
     return valid;
 }
-
