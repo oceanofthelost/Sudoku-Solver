@@ -18,7 +18,7 @@
 			bool validBox(const unsigned short&,const unsigned short&,const unsigned short&);
 			bool isValid(const unsigned short&,const unsigned short&,const unsigned short&);
 			short openCell();
-			bool backtrackSolve();
+			bool backtrackSolve(unsigned,unsigned);
 
 	};
 
